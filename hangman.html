@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<title>Hangman</title>
+<style type="text/css">
+h2{
+	color:blue;
+}
+</style>
+
+<script type="text/javascript">
+		var b;
+		var y;
+		var data;
+		var sec;
+		var indice;
+		var a = "Salut";
+		var cuvinte;
+		var cuvant;
+		var continutCuvant;
+		var cuv;
+		var litereFolosite = 0;
+		var usedLetters = 0;
+		var litereIncercate = 0;
+		var contor = 0;
+		var c;
+		var ctx;
+		var litere = new Array(20);
+		var q = 0;
+		var aux;
+	jQuery(document).ready(function(){
+		
+		jQuery("#IncepeJoc").click(function(){
+	
+	b = document.getElementById("nume");
+	if(b.value==""){
+		alert("Salut, introduceti-va numele!")
+		document.nume.focus();}
+		
+
+	data = new Date();
+	sec = data.getSeconds();
+	indice = (sec%b.value.length)+(sec/b.value.length)+Math.round(Math.sqrt((sec%b.value.length)+(sec/b.value.length)));
+	indice = Math.round(indice);
+	//alert(indice);
+	cuvinte = Array('speranta','echilibru','investitor','sanatate','asigurare','procesor','protestatar','letopiset','farmacie','sentiment','compozitor','descendent','conservator',
+	                'metagalaxie','jurisprudenta','cromozom','corpuscul','convergenta','spectacol','singularitate','mamaliga','dramatism','rugaciune','beligeranta');
+
+//--------------------------------------------------------------------
+
+	cuvant = cuvinte[indice].length;
+	//alert(cuvant)
+	continutCuvant = new Array(cuvant);
+	for(var i=0;i<cuvant;i++){
+		continutCuvant[i]=" _ ";}
+
+	cuv = cuvinte[indice];
+
+	 
+		
+		jQuery("#nume").val(continutCuvant);
+	/*	alert(cuv) */ 
+		jQuery("#text2").fadeIn();
+		jQuery("#text1").fadeOut();	
+		jQuery("#litera").fadeIn();
+		jQuery("#LitereFolosite").fadeIn();
+				
+		
+		
+		jQuery("#litera").keyup(function(){
+		y = document.getElementById("litera");
+		for(var i=0;i<cuvant;i++){
+		if(cuv.substring(i,i+1)==y.value)
+		{alert("ati gasit o litera")	
+		continutCuvant[i] = y.value;
+		litereFolosite++;
+		/*alert("litereFolosite "+litereFolosite)*/
+		jQuery("#nume").val(continutCuvant);
+		
+		}else{litereIncercate++;
+			
+												/*alert("litereIncercate "+litereIncercate)*/}
+		/*alert("final de bucla")*/			}
+
+			litere[q]=y.value;
+				q++;
+					jQuery("#used").val(litere);
+				 
+		if(cuvant-litereFolosite==cuvant)
+		{contor++;
+		alert("Litera nepotrivita")
+		switch(contor){
+			case 1:
+				c=document.getElementById("myCanvas");
+				ctx=c.getContext("2d");
+				ctx.beginPath();
+				ctx.arc(95,50,40,0,2*Math.PI);
+				ctx.stroke();
+			break;
+			
+			case 2:
+				var c=document.getElementById("myCanvas");
+				var ctx=c.getContext("2d");
+				ctx.moveTo(95,90);
+				ctx.lineTo(95,240);
+				ctx.stroke();
+			break;
+			
+			case 3:
+				var c=document.getElementById("myCanvas");
+				var ctx=c.getContext("2d");
+				ctx.moveTo(95,240);
+				ctx.lineTo(0,400);
+				ctx.stroke();
+			break;
+			
+			case 4:
+				var c=document.getElementById("myCanvas");
+				var ctx=c.getContext("2d");
+				ctx.moveTo(95,240);
+				ctx.lineTo(190,400);
+				ctx.stroke();
+			break;
+			
+			case 5:
+				var c=document.getElementById("myCanvas");
+				var ctx=c.getContext("2d");
+				ctx.moveTo(95,105);
+				ctx.lineTo(0,250);
+				ctx.stroke();
+			break;
+			
+			case 6:
+				var c=document.getElementById("myCanvas");
+				var ctx=c.getContext("2d");
+				ctx.moveTo(95,105);
+				ctx.lineTo(190,250);
+				ctx.stroke();
+				ctx.font="20px Arial";
+				ctx.fillText("Odihneasca-se-n pace!",200,50);
+			break;
+		}
+	/*	alert("contor="+contor)*/}
+		else
+		{ litereIncercate = 0;
+		usedLetters +=litereFolosite;
+		litereFolosite = 0;}
+		if(contor==6)
+		{alert("ai pierdut")
+		jQuery("#litera").fadeOut();
+		alert("cuvantul era "+cuv.toUpperCase())
+		jQuery("#jocnou").fadeIn();
+		jQuery("#nume").val("")}	
+		
+		
+		
+		jQuery("#litera").val("");
+		if(usedLetters==cuvant)
+		{alert("Ati castigat!")
+		jQuery("#litera").fadeOut();
+		jQuery("#jocnou").fadeIn();
+		jQuery("#nume").val("")}
+		
+});	
+
+
+}); 
+
+
+});
+function load(){
+location.reload();}
+	
+</script>
+
+
+
+
+</head>
+<body style="width:500px;margin:0 auto;">
+	
+    <h2>Hangman</h2>
+    
+		<label id="text2" style="display:none;" >Cuvantul este</label>
+    		<label id="text1">Introduceti numele dvs</label><input type="text" id="nume" value="" style="width:200px;">
+				<input name="" type="button" value="Joaca" id="IncepeJoc" >
+					<br/>
+					<input type="text" id="litera" value="" style="display:none;width:200px;" >
+						<input name="" type="button" value="Joc nou" id="jocnou" style="display:none" onclick="load()">
+							<div id="LitereFolosite" style="display:none;">Litere folosite<input type="text" id="used" value="" style="width:250px;"></div>
+
+<div style="padding-top:30px;"></div> 
+<canvas id="myCanvas" width="420" height="400" style="border:0px solid #000000;"></canvas>
+   
+   
+   
+</body>
+</html>
